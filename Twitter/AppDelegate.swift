@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import BDBOAuth1Manager
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -41,6 +42,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
   }
 
+  func application(_ app: UIApplication, open url: URL,
+      options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    let requestToken = BDBOAuth1Credential(queryString: url.query)
+    let twitterClient = BDBOAuth1SessionManager(
+        baseURL: URL(string: "https://api.twitter.com")!,
+        consumerKey: "nCjUCjTEVtt2Si7qGgptGyK00",
+        consumerSecret: "u921ZTv1aFyHs64KJ4G5lUAWAJyFHvKOj8eGjGrVZAL4B31xqk")
 
+    twitterClient?.fetchAccessToken(withPath: "oauth/access_token",
+        method: "POST", requestToken: requestToken,
+        success: { (accessToken: BDBOAuth1Credential?) in
+          print("success")
+          twitterClient?.get("1.1/account/verify_credentials.json",
+              parameters: nil, progress: nil,
+              success: { (task: URLSessionDataTask, response: Any?) in
+                let userData = response as! NSDictionary
+                print("Name: \(userData["name"] ?? "NO NAME")")
+              }, failure: { (task: URLSessionDataTask?, error: Error) in
+                print("ERROR: \(error.localizedDescription)")
+              })
+
+          twitterClient?.get("1.1/statuses/home_timeline.json",
+              parameters: nil, progress: nil,
+              success: { (task: URLSessionDataTask, response: Any?) in
+                let tweets = response as! [NSDictionary]
+                for tweet in tweets {
+                  print("\(tweet)")
+                }
+              }, failure: { (task: URLSessionDataTask?, error: Error) in
+                print("ERROR: \(error.localizedDescription)")
+              })
+        }, failure: { (error: Error?) in
+          print("ERROR: \(error!.localizedDescription)")
+        })
+
+    return true
+  }
 }
 
