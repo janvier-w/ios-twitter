@@ -57,8 +57,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
           twitterClient?.get("1.1/account/verify_credentials.json",
               parameters: nil, progress: nil,
               success: { (task: URLSessionDataTask, response: Any?) in
-                let userData = response as! NSDictionary
-                print("Name: \(userData["name"] ?? "NO NAME")")
+                let user = User(dictionary: response as! [String : Any])
+
+                print("Name: \(user.name ?? "NONE")")
+                print("Screen name: \(user.screenName ?? "NONE")")
+                print("Description: \(user.tagline ?? "NONE")")
+                if let profileImageURL = user.profileImageURL {
+                  print("Profile image URL: \(profileImageURL)")
+                }
+                print("")
               }, failure: { (task: URLSessionDataTask?, error: Error) in
                 print("ERROR: \(error.localizedDescription)")
               })
@@ -66,9 +73,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
           twitterClient?.get("1.1/statuses/home_timeline.json",
               parameters: nil, progress: nil,
               success: { (task: URLSessionDataTask, response: Any?) in
-                let tweets = response as! [NSDictionary]
+                let tweets = Tweet.createTweets(
+                    dictionaries: response as! [[String : Any]])
                 for tweet in tweets {
-                  print("\(tweet)")
+                  if let creationTime = tweet.creationTime {
+                    print("Creation time: \(creationTime)")
+                  }
+                  print("Text: \(tweet.text ?? "NONE")")
+                  print("Retweet count: \(tweet.retweetCount)")
+                  print("Favorite count: \(tweet.favoriteCount)")
+                  print("")
                 }
               }, failure: { (task: URLSessionDataTask?, error: Error) in
                 print("ERROR: \(error.localizedDescription)")
