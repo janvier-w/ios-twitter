@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import BDBOAuth1Manager
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -44,52 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func application(_ app: UIApplication, open url: URL,
       options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-    let requestToken = BDBOAuth1Credential(queryString: url.query)
-    let twitterClient = BDBOAuth1SessionManager(
-        baseURL: URL(string: "https://api.twitter.com")!,
-        consumerKey: "nCjUCjTEVtt2Si7qGgptGyK00",
-        consumerSecret: "u921ZTv1aFyHs64KJ4G5lUAWAJyFHvKOj8eGjGrVZAL4B31xqk")
-
-    twitterClient?.fetchAccessToken(withPath: "oauth/access_token",
-        method: "POST", requestToken: requestToken,
-        success: { (accessToken: BDBOAuth1Credential?) in
-          print("success")
-          twitterClient?.get("1.1/account/verify_credentials.json",
-              parameters: nil, progress: nil,
-              success: { (task: URLSessionDataTask, response: Any?) in
-                let user = User(dictionary: response as! [String : Any])
-
-                print("Name: \(user.name ?? "NONE")")
-                print("Screen name: \(user.screenName ?? "NONE")")
-                print("Description: \(user.tagline ?? "NONE")")
-                if let profileImageURL = user.profileImageURL {
-                  print("Profile image URL: \(profileImageURL)")
-                }
-                print("")
-              }, failure: { (task: URLSessionDataTask?, error: Error) in
-                print("ERROR: \(error.localizedDescription)")
-              })
-
-          twitterClient?.get("1.1/statuses/home_timeline.json",
-              parameters: nil, progress: nil,
-              success: { (task: URLSessionDataTask, response: Any?) in
-                let tweets = Tweet.createTweets(
-                    dictionaries: response as! [[String : Any]])
-                for tweet in tweets {
-                  if let creationTime = tweet.creationTime {
-                    print("Creation time: \(creationTime)")
-                  }
-                  print("Text: \(tweet.text ?? "NONE")")
-                  print("Retweet count: \(tweet.retweetCount)")
-                  print("Favorite count: \(tweet.favoriteCount)")
-                  print("")
-                }
-              }, failure: { (task: URLSessionDataTask?, error: Error) in
-                print("ERROR: \(error.localizedDescription)")
-              })
-        }, failure: { (error: Error?) in
-          print("ERROR: \(error!.localizedDescription)")
-        })
+    TwitterClient.sharedInstance?.handleOpenURL(url: url)
 
     return true
   }

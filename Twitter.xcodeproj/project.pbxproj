@@ -9,13 +9,14 @@
 /* Begin PBXBuildFile section */
 		424D0764030C7174CCD79C18 /* Pods_Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D00CB6773BFF4921913FF98 /* Pods_Twitter.framework */; };
 		7BD0EFBE1E9E0495000D07F4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD0EFBD1E9E0495000D07F4 /* AppDelegate.swift */; };
-		7BD0EFC01E9E0495000D07F4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD0EFBF1E9E0495000D07F4 /* ViewController.swift */; };
 		7BD0EFC31E9E0495000D07F4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7BD0EFC11E9E0495000D07F4 /* Main.storyboard */; };
 		7BD0EFC51E9E0495000D07F4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7BD0EFC41E9E0495000D07F4 /* Assets.xcassets */; };
 		7BD0EFC81E9E0495000D07F4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7BD0EFC61E9E0495000D07F4 /* LaunchScreen.storyboard */; };
 		7BD0EFD01E9E1415000D07F4 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD0EFCF1E9E1415000D07F4 /* LoginViewController.swift */; };
 		7BD0EFD31E9ED4B6000D07F4 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD0EFD21E9ED4B6000D07F4 /* User.swift */; };
 		7BD0EFD51E9ED4C6000D07F4 /* Tweet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD0EFD41E9ED4C6000D07F4 /* Tweet.swift */; };
+		7BD0EFD81E9EE1D6000D07F4 /* TwitterClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD0EFD71E9EE1D6000D07F4 /* TwitterClient.swift */; };
+		7BD0EFDB1E9F00E0000D07F4 /* TweetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD0EFDA1E9F00E0000D07F4 /* TweetsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,7 +24,6 @@
 		4D00CB6773BFF4921913FF98 /* Pods_Twitter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Twitter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BD0EFBA1E9E0495000D07F4 /* Twitter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Twitter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BD0EFBD1E9E0495000D07F4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7BD0EFBF1E9E0495000D07F4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7BD0EFC21E9E0495000D07F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7BD0EFC41E9E0495000D07F4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7BD0EFC71E9E0495000D07F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -31,6 +31,8 @@
 		7BD0EFCF1E9E1415000D07F4 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		7BD0EFD21E9ED4B6000D07F4 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		7BD0EFD41E9ED4C6000D07F4 /* Tweet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tweet.swift; sourceTree = "<group>"; };
+		7BD0EFD71E9EE1D6000D07F4 /* TwitterClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwitterClient.swift; sourceTree = "<group>"; };
+		7BD0EFDA1E9F00E0000D07F4 /* TweetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetsViewController.swift; sourceTree = "<group>"; };
 		9D2A774A3EB50E24D48A2EAC /* Pods-Twitter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Twitter.release.xcconfig"; path = "Pods/Target Support Files/Pods-Twitter/Pods-Twitter.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -67,14 +69,14 @@
 		7BD0EFBC1E9E0495000D07F4 /* Twitter */ = {
 			isa = PBXGroup;
 			children = (
+				7BD0EFD91E9F00A8000D07F4 /* ViewControllers */,
+				7BD0EFD61E9EE1B7000D07F4 /* API */,
 				7BD0EFD11E9ED474000D07F4 /* Models */,
 				7BD0EFBD1E9E0495000D07F4 /* AppDelegate.swift */,
-				7BD0EFBF1E9E0495000D07F4 /* ViewController.swift */,
 				7BD0EFC11E9E0495000D07F4 /* Main.storyboard */,
 				7BD0EFC41E9E0495000D07F4 /* Assets.xcassets */,
 				7BD0EFC61E9E0495000D07F4 /* LaunchScreen.storyboard */,
 				7BD0EFC91E9E0495000D07F4 /* Info.plist */,
-				7BD0EFCF1E9E1415000D07F4 /* LoginViewController.swift */,
 			);
 			path = Twitter;
 			sourceTree = "<group>";
@@ -86,6 +88,23 @@
 				7BD0EFD41E9ED4C6000D07F4 /* Tweet.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		7BD0EFD61E9EE1B7000D07F4 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				7BD0EFD71E9EE1D6000D07F4 /* TwitterClient.swift */,
+			);
+			name = API;
+			sourceTree = "<group>";
+		};
+		7BD0EFD91E9F00A8000D07F4 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				7BD0EFCF1E9E1415000D07F4 /* LoginViewController.swift */,
+				7BD0EFDA1E9F00E0000D07F4 /* TweetsViewController.swift */,
+			);
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 		8632A1CCA3A12CBA3D086A83 /* Pods */ = {
@@ -231,8 +250,9 @@
 			files = (
 				7BD0EFD31E9ED4B6000D07F4 /* User.swift in Sources */,
 				7BD0EFD51E9ED4C6000D07F4 /* Tweet.swift in Sources */,
+				7BD0EFDB1E9F00E0000D07F4 /* TweetsViewController.swift in Sources */,
 				7BD0EFD01E9E1415000D07F4 /* LoginViewController.swift in Sources */,
-				7BD0EFC01E9E0495000D07F4 /* ViewController.swift in Sources */,
+				7BD0EFD81E9EE1D6000D07F4 /* TwitterClient.swift in Sources */,
 				7BD0EFBE1E9E0495000D07F4 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
