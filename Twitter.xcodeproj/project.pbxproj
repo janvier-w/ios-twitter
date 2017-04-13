@@ -17,6 +17,8 @@
 		7BD0EFD51E9ED4C6000D07F4 /* Tweet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD0EFD41E9ED4C6000D07F4 /* Tweet.swift */; };
 		7BD0EFD81E9EE1D6000D07F4 /* TwitterClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD0EFD71E9EE1D6000D07F4 /* TwitterClient.swift */; };
 		7BD0EFDB1E9F00E0000D07F4 /* TweetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD0EFDA1E9F00E0000D07F4 /* TweetsViewController.swift */; };
+		7BD0EFDE1E9F884C000D07F4 /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD0EFDD1E9F884C000D07F4 /* TweetCell.swift */; };
+		7BD0EFE21EA00252000D07F4 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7BD0EFE11EA00252000D07F4 /* fontawesome-webfont.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +35,8 @@
 		7BD0EFD41E9ED4C6000D07F4 /* Tweet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tweet.swift; sourceTree = "<group>"; };
 		7BD0EFD71E9EE1D6000D07F4 /* TwitterClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwitterClient.swift; sourceTree = "<group>"; };
 		7BD0EFDA1E9F00E0000D07F4 /* TweetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetsViewController.swift; sourceTree = "<group>"; };
+		7BD0EFDD1E9F884C000D07F4 /* TweetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
+		7BD0EFE11EA00252000D07F4 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		9D2A774A3EB50E24D48A2EAC /* Pods-Twitter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Twitter.release.xcconfig"; path = "Pods/Target Support Files/Pods-Twitter/Pods-Twitter.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -69,8 +73,10 @@
 		7BD0EFBC1E9E0495000D07F4 /* Twitter */ = {
 			isa = PBXGroup;
 			children = (
+				7BD0EFE31EA00380000D07F4 /* Fonts */,
+				7BD0EFDC1E9F881C000D07F4 /* Views */,
 				7BD0EFD91E9F00A8000D07F4 /* ViewControllers */,
-				7BD0EFD61E9EE1B7000D07F4 /* API */,
+				7BD0EFD61E9EE1B7000D07F4 /* APIs */,
 				7BD0EFD11E9ED474000D07F4 /* Models */,
 				7BD0EFBD1E9E0495000D07F4 /* AppDelegate.swift */,
 				7BD0EFC11E9E0495000D07F4 /* Main.storyboard */,
@@ -90,12 +96,12 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
-		7BD0EFD61E9EE1B7000D07F4 /* API */ = {
+		7BD0EFD61E9EE1B7000D07F4 /* APIs */ = {
 			isa = PBXGroup;
 			children = (
 				7BD0EFD71E9EE1D6000D07F4 /* TwitterClient.swift */,
 			);
-			name = API;
+			name = APIs;
 			sourceTree = "<group>";
 		};
 		7BD0EFD91E9F00A8000D07F4 /* ViewControllers */ = {
@@ -105,6 +111,22 @@
 				7BD0EFDA1E9F00E0000D07F4 /* TweetsViewController.swift */,
 			);
 			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		7BD0EFDC1E9F881C000D07F4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7BD0EFDD1E9F884C000D07F4 /* TweetCell.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		7BD0EFE31EA00380000D07F4 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				7BD0EFE11EA00252000D07F4 /* fontawesome-webfont.ttf */,
+			);
+			name = Fonts;
 			sourceTree = "<group>";
 		};
 		8632A1CCA3A12CBA3D086A83 /* Pods */ = {
@@ -188,6 +210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7BD0EFC81E9E0495000D07F4 /* LaunchScreen.storyboard in Resources */,
+				7BD0EFE21EA00252000D07F4 /* fontawesome-webfont.ttf in Resources */,
 				7BD0EFC51E9E0495000D07F4 /* Assets.xcassets in Resources */,
 				7BD0EFC31E9E0495000D07F4 /* Main.storyboard in Resources */,
 			);
@@ -249,6 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7BD0EFD31E9ED4B6000D07F4 /* User.swift in Sources */,
+				7BD0EFDE1E9F884C000D07F4 /* TweetCell.swift in Sources */,
 				7BD0EFD51E9ED4C6000D07F4 /* Tweet.swift in Sources */,
 				7BD0EFDB1E9F00E0000D07F4 /* TweetsViewController.swift in Sources */,
 				7BD0EFD01E9E1415000D07F4 /* LoginViewController.swift in Sources */,

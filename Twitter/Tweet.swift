@@ -10,6 +10,7 @@ import UIKit
 
 class Tweet: NSObject {
   var creationTime: Date?
+  var user: User!
   var text: String?
   var retweetCount: Int = 0
   var favoriteCount: Int = 0
@@ -31,6 +32,7 @@ class Tweet: NSObject {
       dateFormatter.dateFormat = "EEE MMM d HH:mm:ss Z y"
       creationTime = dateFormatter.date(from: creationTimeString)
     }
+    user = User(dictionary: dictionary["user"] as! [String : Any])
     text = dictionary["text"] as? String
     retweetCount = (dictionary["retweet_count"] as? Int) ?? 0
     favoriteCount = (dictionary["favourites_count"] as? Int) ?? 0
