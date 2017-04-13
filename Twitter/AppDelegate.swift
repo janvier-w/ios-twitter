@@ -14,8 +14,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
 
 
-  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-    // Override point for customization after application launch.
+  func application(_ application: UIApplication,
+      didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?)
+      -> Bool {
+    NotificationCenter.default.addObserver(
+        forName: User.UserDidLogoutNotificationName, object: nil,
+        queue: OperationQueue.main) { (notification: Notification) in
+          let storyboard = UIStoryboard(name: "Main", bundle: nil)
+          let viewController = storyboard.instantiateInitialViewController()
+
+          UIView.transition(with: self.window!, duration: 0.75,
+              options: .transitionCrossDissolve,
+              animations: { self.window?.rootViewController = viewController },
+              completion: nil)
+        }
+
+    if User.currentUser != nil {
+      let storyboard = UIStoryboard(name: "Main", bundle: nil)
+      let viewController = storyboard.instantiateViewController(
+          withIdentifier: "TweetsNavigationController")
+      window?.rootViewController = viewController
+    }
+
     return true
   }
 

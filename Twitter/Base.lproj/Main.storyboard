@@ -43,7 +43,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
         </scene>
-        <!--Tweets View Controller-->
+        <!--Home-->
         <scene sceneID="PEJ-Qd-F5H">
             <objects>
                 <viewController id="g1z-wS-S08" customClass="TweetsViewController" customModule="Twitter" customModuleProvider="target" sceneMemberID="viewController">
@@ -63,7 +63,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="uAc-tH-XDe"/>
+                    <navigationItem key="navigationItem" title="Home" id="uAc-tH-XDe">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="sMc-da-Eyy">
+                            <connections>
+                                <action selector="logout:" destination="g1z-wS-S08" id="sXo-Ed-vGg"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UIs-49-bOz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -72,7 +78,7 @@
         <!--Navigation Controller-->
         <scene sceneID="gEO-KF-uZZ">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="uMd-Ia-rlb" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="TweetsNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="uMd-Ia-rlb" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="jtg-Q8-5pj">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>

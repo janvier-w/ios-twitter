@@ -48,10 +48,23 @@ class TwitterClient: BDBOAuth1SessionManager {
     fetchAccessToken(withPath: "oauth/access_token", method: "POST",
         requestToken: requestToken,
         success: { (accessToken: BDBOAuth1Credential?) in
-          self.loginSuccess?()
+          self.userAccount(success: { (user: User) in
+            User.currentUser = user
+            self.loginSuccess?()
+          }, failure: { (error: Error) in
+            self.loginFailure?(error)
+          })
         }, failure: { (error: Error!) in
           self.loginFailure?(error)
         })
+  }
+  
+  func logout() {
+    User.currentUser = nil
+    deauthorize()
+    
+    NotificationCenter.default.post(name: User.UserDidLogoutNotificationName,
+        object: nil)
   }
 
   func userAccount(success: @escaping (User) -> Void,
