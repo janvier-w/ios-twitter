@@ -21,17 +21,13 @@ class TweetsViewController: UIViewController {
     tableView.rowHeight = UITableViewAutomaticDimension
     tableView.estimatedRowHeight = 90
 
-    TwitterClient.sharedInstance?.homeTimeline(
-        success: { (tweets: [Tweet]) in
-          self.tweets = tweets
-          self.tableView.reloadData()
-        }, failure: { (error: Error) in
-          print("ERROR: \(error.localizedDescription)")
-        })
-  }
+    /* Allow pull to refresh */
+    let refreshControl = UIRefreshControl()
+    refreshControl.addTarget(self, action: #selector(refreshTimeline(_:)),
+        for: .valueChanged)
+    tableView.insertSubview(refreshControl, at: 0)
 
-  @IBAction func logout(_ sender: Any) {
-    TwitterClient.sharedInstance?.logout()
+    refreshTimeline(refreshControl)
   }
 
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -50,6 +46,22 @@ class TweetsViewController: UIViewController {
         */
       }
     }
+  }
+
+  @IBAction func logout(_ sender: Any) {
+    TwitterClient.sharedInstance?.logout()
+  }
+
+  func refreshTimeline(_ refreshControl: UIRefreshControl) {
+    TwitterClient.sharedInstance?.homeTimeline(
+        success: { (tweets: [Tweet]) in
+          self.tweets = tweets
+          self.tableView.reloadData()
+          refreshControl.endRefreshing()
+        }, failure: { (error: Error) in
+          print("ERROR: \(error.localizedDescription)")
+          refreshControl.endRefreshing()
+        })
   }
 }
 
