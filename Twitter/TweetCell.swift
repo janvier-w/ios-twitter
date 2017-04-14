@@ -40,8 +40,9 @@ class TweetCell: UITableViewCell {
               creationTime.timeIntervalSinceNow / -60))
           creationTimeLabel.text = "\(timeInterval)m"
         } else {
-          /* For tweets less than 1 minute old, round it up to 1m */
-          creationTimeLabel.text = "1m"
+          /* For tweets less than 1 minute old. Example: 9s. */
+          let timeInterval = Int(-creationTime.timeIntervalSinceNow)
+          creationTimeLabel.text = "\(timeInterval)s"
         }
       }
     }
