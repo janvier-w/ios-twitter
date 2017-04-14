@@ -22,17 +22,12 @@ class TweetsViewController: UIViewController {
     tableView.estimatedRowHeight = 90
 
     TwitterClient.sharedInstance?.homeTimeline(
-      success: { (tweets: [Tweet]) in
-        self.tweets = tweets
-        self.tableView.reloadData()
-    }, failure: { (error: Error) in
-      print("ERROR: \(error.localizedDescription)")
-    })
-  }
-  
-  override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
+        success: { (tweets: [Tweet]) in
+          self.tweets = tweets
+          self.tableView.reloadData()
+        }, failure: { (error: Error) in
+          print("ERROR: \(error.localizedDescription)")
+        })
   }
 
   @IBAction func logout(_ sender: Any) {
@@ -40,10 +35,21 @@ class TweetsViewController: UIViewController {
   }
 
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    let cell = sender as! UITableViewCell
-    let indexPath = tableView.indexPath(for: cell)
-    let viewController = segue.destination as! DetailedTweetViewController
-    viewController.tweet = tweets[indexPath!.row]
+    if segue.identifier != nil {
+      if segue.identifier == "DetailedTweetSegue" {
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPath(for: cell)
+        let viewController = segue.destination as! DetailedTweetViewController
+        viewController.tweet = tweets[indexPath!.row]
+      } else if segue.identifier == "NewTweetSegue" {
+        /*
+        let navigationController = segue.destination as! UINavigationController
+        let viewController = navigationController.topViewController as!
+            NewTweetViewController
+        viewController.delegate = self
+        */
+      }
+    }
   }
 }
 

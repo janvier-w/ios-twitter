@@ -9,8 +9,8 @@
 import UIKit
 
 class Tweet: NSObject {
-  var creationTime: Date?
   var user: User!
+  var creationTime: Date?
   var text: String?
   var retweetCount: Int = 0
   var favoriteCount: Int = 0
@@ -27,12 +27,15 @@ class Tweet: NSObject {
   }
 
   init(dictionary: [String : Any]) {
+    user = User(dictionary: dictionary["user"] as! [String : Any])
+
+    /* Example: Wed Sep 05 00:37:15 +0000 2012 */
     if let creationTimeString = dictionary["created_at"] as? String {
       let dateFormatter = DateFormatter()
-      dateFormatter.dateFormat = "EEE MMM d HH:mm:ss Z y"
+      dateFormatter.dateFormat = "EEE MMM dd HH:mm:ss Z yyyy"
       creationTime = dateFormatter.date(from: creationTimeString)
     }
-    user = User(dictionary: dictionary["user"] as! [String : Any])
+
     text = dictionary["text"] as? String
     retweetCount = (dictionary["retweet_count"] as? Int) ?? 0
     favoriteCount = (dictionary["favorite_count"] as? Int) ?? 0

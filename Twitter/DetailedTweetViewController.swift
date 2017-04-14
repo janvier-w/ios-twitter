@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AFNetworking
 
 class DetailedTweetViewController: UIViewController {
   @IBOutlet weak var userProfileImageView: UIImageView!
@@ -22,38 +23,22 @@ class DetailedTweetViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-      userProfileImageView.setImageWith(tweet.user.profileImageURL!)
-      userNameLabel.text = tweet.user.name
-      userScreenNameLabel.text = "@\(tweet.user.screenName!)"
-      textContentLabel.text = tweet.text
-
-      if let creationTime = tweet.creationTime {
-        let dateFormatter = DateFormatter()
-        dateFormatter.setLocalizedDateFormatFromTemplate("MM/dd/yy KK:mm a")
-        creationTimeLabel.text = dateFormatter.string(from: creationTime)
-      }
-
-      retweetCountLabel.text = "\(tweet.retweetCount)"
-      favoriteCountLabel.text = "\(tweet.favoriteCount)"
-    
+    userProfileImageView.setImageWith(tweet.user.profileImageURL!)
     userProfileImageView.clipsToBounds = true
     userProfileImageView.layer.cornerRadius = 3
+
+    userNameLabel.text = tweet.user.name
+    userScreenNameLabel.text = "@\(tweet.user.screenName!)"
+    textContentLabel.text = tweet.text
+
+    /* Example: 12/1/17 00:30 AM */
+    if let creationTime = tweet.creationTime {
+      let dateFormatter = DateFormatter()
+      dateFormatter.setLocalizedDateFormatFromTemplate("M/d/yy KK:mm a")
+      creationTimeLabel.text = dateFormatter.string(from: creationTime)
+    }
+
+    retweetCountLabel.text = "\(tweet.retweetCount)"
+    favoriteCountLabel.text = "\(tweet.favoriteCount)"
   }
-  
-  override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
-  }
-  
-  
-  /*
-   // MARK: - Navigation
-   
-   // In a storyboard-based application, you will often want to do a little preparation before navigation
-   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-   // Get the new view controller using segue.destinationViewController.
-   // Pass the selected object to the new view controller.
-   }
-   */
-  
 }

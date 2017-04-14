@@ -48,7 +48,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     fetchAccessToken(withPath: "oauth/access_token", method: "POST",
         requestToken: requestToken,
         success: { (accessToken: BDBOAuth1Credential?) in
-          self.userAccount(success: { (user: User) in
+          self.currentAccount(success: { (user: User) in
             User.currentUser = user
             self.loginSuccess?()
           }, failure: { (error: Error) in
@@ -67,7 +67,7 @@ class TwitterClient: BDBOAuth1SessionManager {
         object: nil)
   }
 
-  func userAccount(success: @escaping (User) -> Void,
+  func currentAccount(success: @escaping (User) -> Void,
       failure: @escaping (Error) -> Void) {
     get("1.1/account/verify_credentials.json", parameters: nil, progress: nil,
         success: { (task: URLSessionDataTask, response: Any?) in
@@ -85,6 +85,18 @@ class TwitterClient: BDBOAuth1SessionManager {
           let tweets = Tweet.createTweets(
               dictionaries: response as! [[String : Any]])
           success(tweets)
+        }, failure: { (task: URLSessionDataTask?, error: Error) in
+          failure(error)
+        })
+  }
+
+  func postTweet(_ content: String, success: @escaping (Tweet) -> Void,
+      failure: @escaping (Error) -> Void) {
+    let parameters = ["status" : content]
+    post("1.1/statuses/update.json", parameters: parameters, progress: nil,
+        success: { (task: URLSessionDataTask, response: Any?) in
+          let tweet = Tweet(dictionary: response as! [String : Any])
+          success(tweet)
         }, failure: { (task: URLSessionDataTask?, error: Error) in
           failure(error)
         })
