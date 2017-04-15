@@ -53,12 +53,10 @@ class TweetsViewController: UIViewController {
         let viewController = segue.destination as! DetailedTweetViewController
         viewController.tweet = tweets[indexPath!.row]
       } else if segue.identifier == "NewTweetSegue" {
-        /*
         let navigationController = segue.destination as! UINavigationController
         let viewController = navigationController.topViewController as!
             NewTweetViewController
         viewController.delegate = self
-        */
       }
     }
   }
@@ -149,5 +147,15 @@ extension TweetsViewController: UIScrollViewDelegate {
           self.requestingMoreDataIndicator!.stopAnimating()
           print("ERROR: \(error.localizedDescription)")
         })
+  }
+}
+
+extension TweetsViewController: NewTweetViewControllerDelegate {
+  func newTweetViewController(_ newTweetViewController: NewTweetViewController,
+      didPostTweet tweet: Tweet) {
+    if tweets != nil {
+      tweets.insert(tweet, at: 0)
+      tableView.reloadData()
+    }
   }
 }

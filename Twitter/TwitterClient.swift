@@ -102,9 +102,11 @@ class TwitterClient: BDBOAuth1SessionManager {
 
   func postTweet(_ content: String, success: @escaping (Tweet) -> Void,
       failure: @escaping (Error) -> Void) {
+    /*
     if let escapedContent = content.addingPercentEncoding(
-        withAllowedCharacters: .urlPathAllowed) {
-      let parameters = ["status" : escapedContent]
+        withAllowedCharacters: .urlQueryAllowed) {
+    */
+      let parameters = ["status" : content]
 
       post("1.1/statuses/update.json",
           parameters: parameters, progress: nil,
@@ -114,6 +116,8 @@ class TwitterClient: BDBOAuth1SessionManager {
           }, failure: { (task: URLSessionDataTask?, error: Error) in
             failure(error)
           })
+    /*
     }
+    */
   }
 }

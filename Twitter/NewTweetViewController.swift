@@ -9,12 +9,20 @@
 import UIKit
 import AFNetworking
 
+@objc protocol NewTweetViewControllerDelegate {
+  @objc optional func newTweetViewController(
+      _ newTweetViewController: NewTweetViewController,
+      didPostTweet tweet: Tweet)
+}
+
 class NewTweetViewController: UIViewController {
   @IBOutlet weak var numRemainingCharsItem: UIBarButtonItem!
   @IBOutlet weak var userProfileImageView: UIImageView!
   @IBOutlet weak var userNameLabel: UILabel!
   @IBOutlet weak var userScreenNameLabel: UILabel!
   @IBOutlet weak var tweetContentText: UITextView!
+
+  weak var delegate: NewTweetViewControllerDelegate?
 
   let user = User.currentUser!
 
@@ -45,6 +53,7 @@ class NewTweetViewController: UIViewController {
     TwitterClient.sharedInstance?.postTweet(tweetContentText.text,
         success: { (tweet: Tweet) in
           self.dismiss(animated: true, completion: nil)
+          self.delegate?.newTweetViewController?(self, didPostTweet: tweet)
         }, failure: { (error: Error) in
           print("ERROR: \(error.localizedDescription)")
         })
