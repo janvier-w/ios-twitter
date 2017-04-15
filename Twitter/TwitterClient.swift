@@ -78,9 +78,19 @@ class TwitterClient: BDBOAuth1SessionManager {
         })
   }
 
-  func homeTimeline(success: @escaping ([Tweet]) -> Void,
+  func homeTimeline(maxId: Int?, sinceId: Int?,
+      success: @escaping ([Tweet]) -> Void,
       failure: @escaping (Error) -> Void) {
-    get("1.1/statuses/home_timeline.json", parameters: nil, progress: nil,
+    var parameters = [String : String]()
+    if let maxId = maxId {
+      parameters["max_id"] = "\(maxId)"
+    }
+    if let sinceId = sinceId {
+      parameters["since_id"] = "\(sinceId)"
+    }
+
+    get("1.1/statuses/home_timeline.json",
+        parameters: parameters, progress: nil,
         success: { (task: URLSessionDataTask, response: Any?) in
           let tweets = Tweet.createTweets(
               dictionaries: response as! [[String : Any]])
@@ -94,8 +104,10 @@ class TwitterClient: BDBOAuth1SessionManager {
       failure: @escaping (Error) -> Void) {
     if let escapedContent = content.addingPercentEncoding(
         withAllowedCharacters: .urlPathAllowed) {
-      post("1.1/statuses/update.json?status=\(escapedContent)",
-          parameters: nil, progress: nil,
+      let parameters = ["status" : escapedContent]
+
+      post("1.1/statuses/update.json",
+          parameters: parameters, progress: nil,
           success: { (task: URLSessionDataTask, response: Any?) in
             let tweet = Tweet(dictionary: response as! [String : Any])
             success(tweet)

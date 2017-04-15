@@ -21,6 +21,7 @@
 		7BD0EFE21EA00252000D07F4 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7BD0EFE11EA00252000D07F4 /* fontawesome-webfont.ttf */; };
 		7BD0EFE51EA05AD7000D07F4 /* DetailedTweetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD0EFE41EA05AD7000D07F4 /* DetailedTweetViewController.swift */; };
 		7BD0EFE71EA06F71000D07F4 /* NewTweetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD0EFE61EA06F71000D07F4 /* NewTweetViewController.swift */; };
+		7BEAF4B71EA1A4B100358003 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEAF4B61EA1A4B100358003 /* ActivityIndicatorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		7BD0EFE11EA00252000D07F4 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		7BD0EFE41EA05AD7000D07F4 /* DetailedTweetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailedTweetViewController.swift; sourceTree = "<group>"; };
 		7BD0EFE61EA06F71000D07F4 /* NewTweetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewTweetViewController.swift; sourceTree = "<group>"; };
+		7BEAF4B61EA1A4B100358003 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 		9D2A774A3EB50E24D48A2EAC /* Pods-Twitter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Twitter.release.xcconfig"; path = "Pods/Target Support Files/Pods-Twitter/Pods-Twitter.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -123,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				7BD0EFDD1E9F884C000D07F4 /* TweetCell.swift */,
+				7BEAF4B61EA1A4B100358003 /* ActivityIndicatorView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -279,6 +282,7 @@
 			files = (
 				7BD0EFE51EA05AD7000D07F4 /* DetailedTweetViewController.swift in Sources */,
 				7BD0EFD31E9ED4B6000D07F4 /* User.swift in Sources */,
+				7BEAF4B71EA1A4B100358003 /* ActivityIndicatorView.swift in Sources */,
 				7BD0EFDE1E9F884C000D07F4 /* TweetCell.swift in Sources */,
 				7BD0EFD51E9ED4C6000D07F4 /* Tweet.swift in Sources */,
 				7BD0EFDB1E9F00E0000D07F4 /* TweetsViewController.swift in Sources */,
