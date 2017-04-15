@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -247,13 +248,17 @@
                                 <action selector="cancelTweet:" destination="076-IF-adB" id="WPd-hF-gRi"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Tweet" id="yU3-dK-b9q">
-                            <connections>
-                                <action selector="postTweet:" destination="076-IF-adB" id="IiE-EO-EsK"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem title="Tweet" id="yU3-dK-b9q">
+                                <connections>
+                                    <action selector="postTweet:" destination="076-IF-adB" id="IiE-EO-EsK"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem enabled="NO" title="Item" id="hbI-xd-VQG"/>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="numRemainingCharsItem" destination="hbI-xd-VQG" id="o6W-J4-Rym"/>
                         <outlet property="tweetContentText" destination="Qvj-d6-uek" id="Gj8-MX-qQd"/>
                         <outlet property="userNameLabel" destination="9yD-gz-RrT" id="JOO-Yy-Afy"/>
                         <outlet property="userProfileImageView" destination="B4I-iF-ynG" id="IoD-ci-c53"/>

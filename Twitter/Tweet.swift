@@ -9,12 +9,7 @@
 import UIKit
 
 class Tweet: NSObject {
-  var id: Int!
-  var user: User!
-  var creationTime: Date?
-  var text: String?
-  var retweetCount: Int = 0
-  var favoriteCount: Int = 0
+  static let MaxTextLength = 140
 
   class func createTweets(dictionaries: [[String : Any]]) -> [Tweet] {
     var tweets = [Tweet]()
@@ -26,6 +21,13 @@ class Tweet: NSObject {
 
     return tweets
   }
+
+  var id: Int!
+  var user: User!
+  var creationTime: Date?
+  var text: String?
+  var retweetCount: Int = 0
+  var favoriteCount: Int = 0
 
   init(dictionary: [String : Any]) {
     id = dictionary["id"] as! Int
