@@ -9,7 +9,7 @@
 import UIKit
 
 class ActivityIndicatorView: UIView {
-  static let defaultHeight: CGFloat = 160.0
+  static let defaultHeight: CGFloat = 60.0
 
   let activityIndicatorView = UIActivityIndicatorView()
 

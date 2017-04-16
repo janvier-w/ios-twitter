@@ -9,6 +9,11 @@
 import UIKit
 import AFNetworking
 
+let NumSecondsPerMinute = 60
+let NumSecondsPerHour = 60 * NumSecondsPerMinute
+let NumSecondsPerDay = 24 * NumSecondsPerHour
+let NumSecondsPerWeek = 7 * NumSecondsPerDay
+
 @objc protocol TweetCellDelegate {
   @objc optional func tweetCell(_ tweetCell: TweetCell,
       didUpdateTweet tweet: Tweet)
@@ -51,21 +56,25 @@ class TweetCell: UITableViewCell {
 
       if let creationTime = tweet.creationTime {
         var timeInterval = Int(-creationTime.timeIntervalSinceNow)
-        if timeInterval >= 86400 {
-          /* For tweets more than 1 day old. Example: 4/14/17. */
+        if timeInterval >= NumSecondsPerWeek {
+          /* For tweets more than 1 week old. Example: 4/14/17. */
           let dateFormatter = DateFormatter()
           dateFormatter.setLocalizedDateFormatFromTemplate("M/d/yy")
           creationTimeLabel.text = dateFormatter.string(from: creationTime)
-        } else if timeInterval >= 3600 {
-          /* For tweets more than 1 hour old. Example: 9h. */
-          timeInterval = Int(round(Double(timeInterval / 3600)))
+        } else if timeInterval >= NumSecondsPerDay {
+          /* For tweets more than 1 day old. Example: 3d. */
+          timeInterval = Int(round(Double(timeInterval / NumSecondsPerDay)))
+          creationTimeLabel.text = "\(timeInterval)d"
+        } else if timeInterval >= NumSecondsPerHour {
+          /* For tweets more than 1 hour old. Example: 3h. */
+          timeInterval = Int(round(Double(timeInterval / NumSecondsPerHour)))
           creationTimeLabel.text = "\(timeInterval)h"
-        } else if timeInterval >= 60 {
-          /* For tweets more than 1 minute old. Example: 9m. */
-          timeInterval = Int(round(Double(timeInterval / 60)))
+        } else if timeInterval >= NumSecondsPerMinute {
+          /* For tweets more than 1 minute old. Example: 3m. */
+          timeInterval = Int(round(Double(timeInterval / NumSecondsPerMinute)))
           creationTimeLabel.text = "\(timeInterval)m"
         } else {
-          /* For tweets less than 1 minute old. Example: 9s. */
+          /* For tweets less than 1 minute old. Example: 3s. */
           creationTimeLabel.text = "\(timeInterval)s"
         }
       }
