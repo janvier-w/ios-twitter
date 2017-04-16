@@ -10,6 +10,9 @@ import UIKit
 import AFNetworking
 
 class DetailedTweetViewController: UIViewController {
+  @IBOutlet weak var retweetIndicatorLabel: UILabel!
+  @IBOutlet weak var retweetUserNameLabel: UILabel!
+  @IBOutlet weak var userProfileImageViewTopConstraint: NSLayoutConstraint!
   @IBOutlet weak var userProfileImageView: UIImageView!
   @IBOutlet weak var userNameLabel: UILabel!
   @IBOutlet weak var userScreenNameLabel: UILabel!
@@ -17,11 +20,25 @@ class DetailedTweetViewController: UIViewController {
   @IBOutlet weak var creationTimeLabel: UILabel!
   @IBOutlet weak var retweetCountLabel: UILabel!
   @IBOutlet weak var favoriteCountLabel: UILabel!
+  @IBOutlet weak var replyButton: UIButton!
+  @IBOutlet weak var repostButton: UIButton!
+  @IBOutlet weak var favoriteButton: UIButton!
   
   var tweet: Tweet!
   
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    if let retweetUser = tweet.retweetUser {
+      retweetIndicatorLabel.isHidden = false
+      retweetUserNameLabel.text = "\(retweetUser.name!) Retweeted"
+      retweetUserNameLabel.isHidden = false
+      userProfileImageViewTopConstraint.constant = 6
+    } else {
+      retweetIndicatorLabel.isHidden = true
+      retweetUserNameLabel.isHidden = true
+      userProfileImageViewTopConstraint.constant = -10
+    }
 
     userProfileImageView.setImageWith(tweet.user.profileImageURL!)
     userProfileImageView.clipsToBounds = true
@@ -40,6 +57,15 @@ class DetailedTweetViewController: UIViewController {
 
     retweetCountLabel.text = "\(tweet.retweetCount)"
     favoriteCountLabel.text = "\(tweet.favoriteCount)"
+
+    if tweet.isRetweeted {
+      repostButton.setTitleColor(
+          UIColor.init(red: 0.0, green: 0.8, blue: 0.0, alpha: 1.0),
+          for: .normal)
+    }
+    if tweet.isFavorited {
+      favoriteButton.setTitleColor(.red, for: .normal)
+    }
   }
 
   @IBAction func replyTweet(_ sender: Any) {

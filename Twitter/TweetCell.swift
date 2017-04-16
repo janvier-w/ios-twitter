@@ -15,43 +15,71 @@ import AFNetworking
 }
 
 class TweetCell: UITableViewCell {
+  @IBOutlet weak var retweetIndicatorLabel: UILabel!
+  @IBOutlet weak var retweetUserNameLabel: UILabel!
+  @IBOutlet weak var userProfileImageTopConstraint: NSLayoutConstraint!
   @IBOutlet weak var userProfileImageView: UIImageView!
   @IBOutlet weak var userNameLabel: UILabel!
   @IBOutlet weak var userScreenNameLabel: UILabel!
   @IBOutlet weak var creationTimeLabel: UILabel!
   @IBOutlet weak var textContentLabel: UILabel!
+  @IBOutlet weak var replyButton: UIButton!
+  @IBOutlet weak var repostButton: UIButton!
+  @IBOutlet weak var repostCountLabel: UILabel!
+  @IBOutlet weak var favoriteButton: UIButton!
+  @IBOutlet weak var favoriteCountLabel: UILabel!
 
   weak var delegate: TweetCellDelegate?
 
   var tweet: Tweet! {
     didSet {
+      if let retweetUser = tweet.retweetUser {
+        retweetIndicatorLabel.isHidden = false
+        retweetUserNameLabel.text = "\(retweetUser.name!) Retweeted"
+        retweetUserNameLabel.isHidden = false
+        userProfileImageTopConstraint.constant = 6
+      } else {
+        retweetIndicatorLabel.isHidden = true
+        retweetUserNameLabel.isHidden = true
+        userProfileImageTopConstraint.constant = -10
+      }
+
       userProfileImageView.setImageWith(tweet.user.profileImageURL!)
       userNameLabel.text = tweet.user.name
       userScreenNameLabel.text = "@\(tweet.user.screenName!)"
       textContentLabel.text = tweet.text
 
       if let creationTime = tweet.creationTime {
-        if creationTime.timeIntervalSinceNow < -86400 {
+        var timeInterval = Int(-creationTime.timeIntervalSinceNow)
+        if timeInterval >= 86400 {
           /* For tweets more than 1 day old. Example: 4/14/17. */
           let dateFormatter = DateFormatter()
           dateFormatter.setLocalizedDateFormatFromTemplate("M/d/yy")
           creationTimeLabel.text = dateFormatter.string(from: creationTime)
-        } else if creationTime.timeIntervalSinceNow < -3600 {
+        } else if timeInterval >= 3600 {
           /* For tweets more than 1 hour old. Example: 9h. */
-          let timeInterval = Int(round(
-              creationTime.timeIntervalSinceNow / -3600))
+          timeInterval = Int(round(Double(timeInterval / 3600)))
           creationTimeLabel.text = "\(timeInterval)h"
-        } else if creationTime.timeIntervalSinceNow < -60 {
+        } else if timeInterval >= 60 {
           /* For tweets more than 1 minute old. Example: 9m. */
-          let timeInterval = Int(round(
-              creationTime.timeIntervalSinceNow / -60))
+          timeInterval = Int(round(Double(timeInterval / 60)))
           creationTimeLabel.text = "\(timeInterval)m"
         } else {
           /* For tweets less than 1 minute old. Example: 9s. */
-          let timeInterval = Int(-creationTime.timeIntervalSinceNow)
           creationTimeLabel.text = "\(timeInterval)s"
         }
       }
+
+      if tweet.isRetweeted {
+        repostButton.setTitleColor(
+          UIColor.init(red: 0.0, green: 0.8, blue: 0.0, alpha: 1.0),
+          for: .normal)
+      }
+      repostCountLabel.text = "\(tweet.retweetCount)"
+      if tweet.isFavorited {
+        favoriteButton.setTitleColor(.red, for: .normal)
+      }
+      favoriteCountLabel.text = "\(tweet.favoriteCount)"
     }
   }
 

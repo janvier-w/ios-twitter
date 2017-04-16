@@ -33,7 +33,7 @@ class User: NSObject {
             withJSONObject: user.dict!, options: [])
         UserDefaults.standard.set(data, forKey: "currentUserData")
       } else {
-        UserDefaults.standard.set(nil, forKey: "currentUserData")
+        UserDefaults.standard.removeObject(forKey: "currentUserData")
       }
       UserDefaults.standard.synchronize()
     }
