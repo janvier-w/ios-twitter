@@ -9,12 +9,19 @@
 import UIKit
 import AFNetworking
 
+@objc protocol TweetCellDelegate {
+  @objc optional func tweetCell(_ tweetCell: TweetCell,
+      didUpdateTweet tweet: Tweet)
+}
+
 class TweetCell: UITableViewCell {
   @IBOutlet weak var userProfileImageView: UIImageView!
   @IBOutlet weak var userNameLabel: UILabel!
   @IBOutlet weak var userScreenNameLabel: UILabel!
   @IBOutlet weak var creationTimeLabel: UILabel!
   @IBOutlet weak var textContentLabel: UILabel!
+
+  weak var delegate: TweetCellDelegate?
 
   var tweet: Tweet! {
     didSet {
@@ -53,5 +60,29 @@ class TweetCell: UITableViewCell {
 
     userProfileImageView.clipsToBounds = true
     userProfileImageView.layer.cornerRadius = 3
+  }
+
+  @IBAction func replyTweet(_ sender: Any) {
+    //TwitterClient.sharedInstance?.replyTweet(id: tweet.id)
+  }
+
+  @IBAction func repostTweet(_ sender: Any) {
+    TwitterClient.sharedInstance?.repostTweet(tweet.id,
+        success: { (tweet: Tweet) in
+          self.tweet = tweet
+          self.delegate?.tweetCell?(self, didUpdateTweet: tweet)
+        }, failure: { (error: Error) in
+          print("ERROR: \(error.localizedDescription)")
+        })
+  }
+
+  @IBAction func favoriteTweet(_ sender: Any) {
+    TwitterClient.sharedInstance?.favoriteTweet(tweet.id,
+        success: { (tweet: Tweet) in
+          self.tweet = tweet
+          self.delegate?.tweetCell?(self, didUpdateTweet: tweet)
+        }, failure: { (error: Error) in
+          print("ERROR: \(error.localizedDescription)")
+        })
   }
 }

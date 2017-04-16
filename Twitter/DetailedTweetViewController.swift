@@ -41,4 +41,27 @@ class DetailedTweetViewController: UIViewController {
     retweetCountLabel.text = "\(tweet.retweetCount)"
     favoriteCountLabel.text = "\(tweet.favoriteCount)"
   }
+
+  @IBAction func replyTweet(_ sender: Any) {
+  }
+
+  @IBAction func repostTweet(_ sender: Any) {
+    TwitterClient.sharedInstance?.repostTweet(tweet.id,
+        success: { (tweet: Tweet) in
+          self.tweet = tweet
+          self.retweetCountLabel.text = "\(tweet.retweetCount)"
+        }, failure: { (error: Error) in
+          print("ERROR: \(error.localizedDescription)")
+        })
+  }
+
+  @IBAction func favoriteTweet(_ sender: Any) {
+    TwitterClient.sharedInstance?.favoriteTweet(tweet.id,
+        success: { (tweet: Tweet) in
+          self.tweet = tweet
+          self.favoriteCountLabel.text = "\(tweet.favoriteCount)"
+        }, failure: { (error: Error) in
+          print("ERROR: \(error.localizedDescription)")
+        })
+  }
 }

@@ -91,6 +91,7 @@ extension TweetsViewController: UITableViewDataSource, UITableViewDelegate {
       -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(
         withIdentifier: "TweetCell", for: indexPath) as! TweetCell
+    cell.delegate = self
     cell.tweet = tweets[indexPath.row]
 
     return cell
@@ -147,6 +148,14 @@ extension TweetsViewController: UIScrollViewDelegate {
           self.requestingMoreDataIndicator!.stopAnimating()
           print("ERROR: \(error.localizedDescription)")
         })
+  }
+}
+
+extension TweetsViewController: TweetCellDelegate {
+  func tweetCell(_ tweetCell: TweetCell, didUpdateTweet tweet: Tweet) {
+    if let indexPath = tableView.indexPath(for: tweetCell) {
+      tweets[indexPath.row] = tweet
+    }
   }
 }
 

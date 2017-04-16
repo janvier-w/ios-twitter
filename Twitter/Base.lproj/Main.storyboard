@@ -110,6 +110,9 @@
                                                     <state key="normal" title="">
                                                         <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="replyTweet:" destination="Pgh-DN-GKw" eventType="touchUpInside" id="DlJ-4f-F8V"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dyF-nZ-lzA">
                                                     <rect key="frame" x="142" y="50.5" width="30" height="24"/>
@@ -117,6 +120,9 @@
                                                     <state key="normal" title="">
                                                         <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="repostTweet:" destination="Pgh-DN-GKw" eventType="touchUpInside" id="tsF-Jx-xOS"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bQ6-4p-TKq">
                                                     <rect key="frame" x="220" y="50.5" width="30" height="24"/>
@@ -124,6 +130,9 @@
                                                     <state key="normal" title="">
                                                         <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="favoriteTweet:" destination="Pgh-DN-GKw" eventType="touchUpInside" id="KQG-c4-Hid"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -368,6 +377,9 @@
                                 <state key="normal" title="">
                                     <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="replyTweet:" destination="DyP-cu-Cd4" eventType="touchUpInside" id="NlH-w5-XdJ"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aoa-0O-czw">
                                 <rect key="frame" x="110" y="208" width="30" height="24"/>
@@ -379,6 +391,9 @@
                                 <state key="normal" title="">
                                     <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="repostTweet:" destination="DyP-cu-Cd4" eventType="touchUpInside" id="udG-hk-Ycx"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2mV-9z-sbX">
                                 <rect key="frame" x="204" y="208" width="30" height="24"/>
@@ -390,6 +405,9 @@
                                 <state key="normal" title="">
                                     <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="favoriteTweet:" destination="DyP-cu-Cd4" eventType="touchUpInside" id="RxK-Lk-57M"/>
+                                </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6o0-zS-NDm">
                                 <rect key="frame" x="16" y="238" width="288" height="1"/>
