@@ -38,9 +38,10 @@ class TweetCell: UITableViewCell {
 
   var tweet: Tweet! {
     didSet {
-      if let retweetUser = tweet.retweetUser {
+      if tweet.retweetUser != nil &&
+         tweet.retweetUser!.screenName != User.currentUser!.screenName {
         retweetIndicatorLabel.isHidden = false
-        retweetUserNameLabel.text = "\(retweetUser.name!) Retweeted"
+        retweetUserNameLabel.text = "\(tweet.retweetUser!.name!) Retweeted"
         retweetUserNameLabel.isHidden = false
         userProfileImageTopConstraint.constant = 6
       } else {
@@ -83,12 +84,27 @@ class TweetCell: UITableViewCell {
         repostButton.setTitleColor(
           UIColor.init(red: 0.0, green: 0.8, blue: 0.0, alpha: 1.0),
           for: .normal)
+      } else {
+        repostButton.setTitleColor(.lightGray, for: .normal)
       }
-      repostCountLabel.text = "\(tweet.retweetCount)"
+      if tweet.retweetCount == 0 {
+        repostCountLabel.isHidden = true
+      } else {
+        repostCountLabel.text = "\(tweet.retweetCount)"
+        repostCountLabel.isHidden = false
+      }
+
       if tweet.isFavorited {
         favoriteButton.setTitleColor(.red, for: .normal)
+      } else {
+        favoriteButton.setTitleColor(.lightGray, for: .normal)
       }
-      favoriteCountLabel.text = "\(tweet.favoriteCount)"
+      if tweet.favoriteCount == 0 {
+        favoriteCountLabel.isHidden = true
+      } else {
+        favoriteCountLabel.text = "\(tweet.favoriteCount)"
+        favoriteCountLabel.isHidden = false
+      }
     }
   }
 
@@ -97,10 +113,6 @@ class TweetCell: UITableViewCell {
 
     userProfileImageView.clipsToBounds = true
     userProfileImageView.layer.cornerRadius = 3
-  }
-
-  @IBAction func replyTweet(_ sender: Any) {
-    //TwitterClient.sharedInstance?.replyTweet(id: tweet.id)
   }
 
   @IBAction func repostTweet(_ sender: Any) {

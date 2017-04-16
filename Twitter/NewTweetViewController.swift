@@ -20,11 +20,15 @@ class NewTweetViewController: UIViewController {
   @IBOutlet weak var userProfileImageView: UIImageView!
   @IBOutlet weak var userNameLabel: UILabel!
   @IBOutlet weak var userScreenNameLabel: UILabel!
+  @IBOutlet weak var replyToIndicatorLabel: UILabel!
+  @IBOutlet weak var replyToUserScreenNameLabel: UILabel!
   @IBOutlet weak var tweetContentText: UITextView!
+  @IBOutlet weak var tweetContentTextTopConstraint: NSLayoutConstraint!
 
   weak var delegate: NewTweetViewControllerDelegate?
 
   let user = User.currentUser!
+  var replyToTweet: Tweet?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -42,6 +46,23 @@ class NewTweetViewController: UIViewController {
     userNameLabel.text = user.name
     userScreenNameLabel.text = "@\(user.screenName!)"
 
+    if let tweet = replyToTweet {
+      if tweet.retweetUser != nil &&
+         tweet.retweetUser!.screenName != User.currentUser!.screenName {
+        replyToUserScreenNameLabel.text =
+            "@\(tweet.user.screenName!) and @\(tweet.retweetUser!.screenName!)"
+      } else {
+        replyToUserScreenNameLabel.text = "@\(tweet.user.screenName!)"
+      }
+      replyToIndicatorLabel.isHidden = false
+      replyToUserScreenNameLabel.isHidden = false
+      tweetContentTextTopConstraint.constant = 8
+    } else {
+      replyToIndicatorLabel.isHidden = true
+      replyToUserScreenNameLabel.isHidden = true
+      tweetContentTextTopConstraint.constant = -23
+    }
+
     tweetContentText.delegate = self
   }
 
@@ -50,13 +71,29 @@ class NewTweetViewController: UIViewController {
   }
 
   @IBAction func postTweet(_ sender: Any) {
-    TwitterClient.sharedInstance?.postTweet(tweetContentText.text,
-        success: { (tweet: Tweet) in
-          self.dismiss(animated: true, completion: nil)
-          self.delegate?.newTweetViewController?(self, didPostTweet: tweet)
-        }, failure: { (error: Error) in
-          print("ERROR: \(error.localizedDescription)")
-        })
+    if var tweetText = tweetContentText.text {
+      if let tweet = replyToTweet {
+        if tweet.retweetUser != nil &&
+           tweet.retweetUser!.screenName != User.currentUser!.screenName {
+          tweetText =
+              "@\(tweet.user.screenName!) @\(tweet.retweetUser!.screenName!) " +
+              tweetText
+        } else {
+          tweetText =
+              "@\(tweet.user.screenName!) " +
+              tweetText
+        }
+      }
+
+      TwitterClient.sharedInstance?.postTweet(tweetText,
+          inReplyToStatusId: replyToTweet?.id,
+          success: { (tweet: Tweet) in
+            self.dismiss(animated: true, completion: nil)
+            self.delegate?.newTweetViewController?(self, didPostTweet: tweet)
+          }, failure: { (error: Error) in
+            print("ERROR: \(error.localizedDescription)")
+          })
+    }
   }
 }
 

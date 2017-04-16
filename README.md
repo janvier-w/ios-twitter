@@ -22,13 +22,13 @@ The following **optional** features are implemented:
 - [x] After creating a new tweet, a user should be able to view it in the timeline immediately without refetching the timeline from the network.
 - [x] Retweeting and favoriting should increment the retweet and favorite count.
 - [ ] User should be able to unretweet and unfavorite and should decrement the retweet and favorite count.
-- [ ] Replies should be prefixed with the username and the reply_id should be set when posting the tweet,
+- [x] Replies should be prefixed with the username and the reply_id should be set when posting the tweet,
 - [x] User can load more tweets once they reach the bottom of the feed using infinite loading similar to the actual Twitter client.
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1.
-2.
+1. I implemented DetailedTweetViewControllerDelegate to inform TweetsViewController when a user retweets/favorites a tweet in the detailed view. Using this, I have to search the index of the updated tweet in the tweets array in the TweetsViewController, set the tweet in the array and reload the table view cell at that row. Is there a better way to do this? It seems that this has something to do with the pass by reference vs pass by value.
+2. For this specific app, could you give examples of features (other than logout) that would be better to implement with notification vs delegate?
 
 ## Video Walkthrough
 

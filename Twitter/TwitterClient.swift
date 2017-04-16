@@ -100,13 +100,17 @@ class TwitterClient: BDBOAuth1SessionManager {
         })
   }
 
-  func postTweet(_ content: String, success: @escaping (Tweet) -> Void,
+  func postTweet(_ content: String, inReplyToStatusId statusId: Int?,
+      success: @escaping (Tweet) -> Void,
       failure: @escaping (Error) -> Void) {
     /*
     if let escapedContent = content.addingPercentEncoding(
         withAllowedCharacters: .urlQueryAllowed) {
     */
-      let parameters = ["status" : content]
+      var parameters: [String : Any] = ["status" : content]
+      if let id = statusId {
+        parameters["in_reply_to_status_id"] = id
+      }
 
       post("1.1/statuses/update.json",
           parameters: parameters, progress: nil,

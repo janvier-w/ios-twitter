@@ -51,12 +51,22 @@ class TweetsViewController: UIViewController {
         let cell = sender as! UITableViewCell
         let indexPath = tableView.indexPath(for: cell)
         let viewController = segue.destination as! DetailedTweetViewController
+        viewController.delegate = self
         viewController.tweet = tweets[indexPath!.row]
       } else if segue.identifier == "NewTweetSegue" {
         let navigationController = segue.destination as! UINavigationController
         let viewController = navigationController.topViewController as!
             NewTweetViewController
         viewController.delegate = self
+      } else if segue.identifier == "ReplyToTweetSegue" {
+        let replyToButton = sender as! UIButton
+        let cell = replyToButton.superview!.superview as! UITableViewCell
+        let indexPath = tableView.indexPath(for: cell)
+        let navigationController = segue.destination as! UINavigationController
+        let viewController = navigationController.topViewController as!
+            NewTweetViewController
+        viewController.delegate = self
+        viewController.replyToTweet = tweets[indexPath!.row]
       }
     }
   }
@@ -155,6 +165,32 @@ extension TweetsViewController: TweetCellDelegate {
   func tweetCell(_ tweetCell: TweetCell, didUpdateTweet tweet: Tweet) {
     if let indexPath = tableView.indexPath(for: tweetCell) {
       tweets[indexPath.row] = tweet
+    }
+  }
+}
+
+extension TweetsViewController: DetailedTweetViewControllerDelegate {
+  func detailedTweetViewController(
+      _ detailedTweetViewController: DetailedTweetViewController,
+      didUpdateTweet tweet: Tweet) {
+    if tweets != nil {
+      for index in 0..<tweets.count {
+        if tweets[index].id == tweet.id {
+          tweets[index] = tweet
+          tableView.reloadRows(at: [IndexPath(row: index, section: 0)],
+              with: .top)
+          break
+        }
+      }
+    }
+  }
+
+  func detailedTweetViewController(
+      _ detailedTweetViewController: DetailedTweetViewController,
+      didPostReplyTweet tweet: Tweet) {
+    if tweets != nil {
+      tweets.insert(tweet, at: 0)
+      tableView.reloadData()
     }
   }
 }

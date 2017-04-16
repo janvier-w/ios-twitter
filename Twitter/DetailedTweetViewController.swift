@@ -9,6 +9,16 @@
 import UIKit
 import AFNetworking
 
+@objc protocol DetailedTweetViewControllerDelegate {
+  @objc optional func detailedTweetViewController(
+      _ detailedTweetViewController: DetailedTweetViewController,
+      didUpdateTweet tweet: Tweet)
+
+  @objc optional func detailedTweetViewController(
+      _ detailedTweetViewController: DetailedTweetViewController,
+      didPostReplyTweet tweet: Tweet)
+}
+
 class DetailedTweetViewController: UIViewController {
   @IBOutlet weak var retweetIndicatorLabel: UILabel!
   @IBOutlet weak var retweetUserNameLabel: UILabel!
@@ -23,15 +33,34 @@ class DetailedTweetViewController: UIViewController {
   @IBOutlet weak var replyButton: UIButton!
   @IBOutlet weak var repostButton: UIButton!
   @IBOutlet weak var favoriteButton: UIButton!
+
+  weak var delegate: DetailedTweetViewControllerDelegate?
   
   var tweet: Tweet!
   
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    if let retweetUser = tweet.retweetUser {
+    updateView()
+  }
+
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if segue.identifier != nil {
+      if segue.identifier == "ReplyToTweetSegue" {
+        let navigationController = segue.destination as! UINavigationController
+        let viewController = navigationController.topViewController as!
+            NewTweetViewController
+        viewController.delegate = self
+        viewController.replyToTweet = tweet
+      }
+    }
+  }
+
+  func updateView() {
+    if tweet.retweetUser != nil &&
+       tweet.retweetUser!.screenName != User.currentUser!.screenName {
       retweetIndicatorLabel.isHidden = false
-      retweetUserNameLabel.text = "\(retweetUser.name!) Retweeted"
+      retweetUserNameLabel.text = "\(tweet.retweetUser!.name!) Retweeted"
       retweetUserNameLabel.isHidden = false
       userProfileImageViewTopConstraint.constant = 6
     } else {
@@ -62,20 +91,23 @@ class DetailedTweetViewController: UIViewController {
       repostButton.setTitleColor(
           UIColor.init(red: 0.0, green: 0.8, blue: 0.0, alpha: 1.0),
           for: .normal)
+    } else {
+      repostButton.setTitleColor(.lightGray, for: .normal)
     }
     if tweet.isFavorited {
       favoriteButton.setTitleColor(.red, for: .normal)
+    } else {
+      favoriteButton.setTitleColor(.lightGray, for: .normal)
     }
-  }
-
-  @IBAction func replyTweet(_ sender: Any) {
   }
 
   @IBAction func repostTweet(_ sender: Any) {
     TwitterClient.sharedInstance?.repostTweet(tweet.id,
         success: { (tweet: Tweet) in
           self.tweet = tweet
-          self.retweetCountLabel.text = "\(tweet.retweetCount)"
+          self.updateView()
+          self.delegate?.detailedTweetViewController?(self,
+              didUpdateTweet: tweet)
         }, failure: { (error: Error) in
           print("ERROR: \(error.localizedDescription)")
         })
@@ -85,9 +117,18 @@ class DetailedTweetViewController: UIViewController {
     TwitterClient.sharedInstance?.favoriteTweet(tweet.id,
         success: { (tweet: Tweet) in
           self.tweet = tweet
-          self.favoriteCountLabel.text = "\(tweet.favoriteCount)"
+          self.updateView()
+          self.delegate?.detailedTweetViewController?(self,
+              didUpdateTweet: tweet)
         }, failure: { (error: Error) in
           print("ERROR: \(error.localizedDescription)")
         })
+  }
+}
+
+extension DetailedTweetViewController: NewTweetViewControllerDelegate {
+  func newTweetViewController(_ newTweetViewController: NewTweetViewController,
+      didPostTweet tweet: Tweet) {
+    delegate?.detailedTweetViewController?(self, didPostReplyTweet: tweet)
   }
 }
