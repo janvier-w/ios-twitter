@@ -31,9 +31,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     if User.currentUser != nil {
       let storyboard = UIStoryboard(name: "Main", bundle: nil)
+      /*
       let viewController = storyboard.instantiateViewController(
           withIdentifier: "TweetsNavigationController")
-      window?.rootViewController = viewController
+      */
+      let hamburgerViewController = storyboard.instantiateViewController(
+          withIdentifier: "HamburgerViewController") as! HamburgerViewController
+      let menuViewController = storyboard.instantiateViewController(
+          withIdentifier: "MenuViewController") as! MenuViewController
+
+      /* WARNING: These two statements are not interchangeable. Switching them
+       *          will crash the app since the hamburgerViewController is nil.
+       */
+      menuViewController.hamburgerViewController = hamburgerViewController
+      hamburgerViewController.menuViewController = menuViewController
+
+      window?.rootViewController = hamburgerViewController
     }
 
     return true

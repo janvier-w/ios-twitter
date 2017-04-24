@@ -15,6 +15,12 @@ class Tweet: NSObject {
     var tweets = [Tweet]()
 
     for dictionary in dictionaries {
+      /*
+      for (key, val) in dictionary {
+        print("[\(key)]: [\(val)]")
+      }
+      print(" ")
+      */
       let tweet = Tweet(dictionary: dictionary)
       tweets.append(tweet)
     }

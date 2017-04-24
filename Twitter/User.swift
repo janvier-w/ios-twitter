@@ -40,19 +40,32 @@ class User: NSObject {
   }
 
   var dict: [String : Any]?
+  var id: Int?
   var name: String?
   var screenName: String?
   var tagline: String?
+  var bannerImageURL: URL?
   var profileImageURL: URL?
+  var statusesCount: Int = 0
+  var friendsCount: Int = 0
+  var followersCount: Int = 0
 
   init(dictionary: [String : Any]) {
     dict = dictionary
+    id = dictionary["id"] as? Int
     name = dictionary["name"] as? String
     screenName = dictionary["screen_name"] as? String
     tagline = dictionary["description"] as? String
+    if let bannerImageURLString =
+        dictionary["profile_banner_url"] as? String {
+      bannerImageURL = URL(string: bannerImageURLString)
+    }
     if let profileImageURLString =
         dictionary["profile_image_url_https"] as? String {
       profileImageURL = URL(string: profileImageURLString)
     }
+    statusesCount = (dictionary["statuses_count"] as? Int) ?? 0
+    friendsCount = (dictionary["friends_count"] as? Int) ?? 0
+    followersCount = (dictionary["followers_count"] as? Int) ?? 0
   }
 }

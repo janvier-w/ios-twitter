@@ -1,14 +1,14 @@
 //
-//  TweetsViewController.swift
+//  MentionsViewController.swift
 //  Twitter
 //
-//  Created by Janvier Wijaya on 4/12/17.
+//  Created by Janvier Wijaya on 4/23/17.
 //  Copyright © 2017 Janvier Wijaya. All rights reserved.
 //
 
 import UIKit
 
-class TweetsViewController: UIViewController {
+class MentionsViewController: UIViewController {
   @IBOutlet weak var tableView: UITableView!
 
   var tweets: [Tweet]!
@@ -79,7 +79,7 @@ class TweetsViewController: UIViewController {
   }
 
   func refreshTimeline(_ refreshControl: UIRefreshControl) {
-    TwitterClient.sharedInstance?.homeTimeline(maxId: nil, sinceId: nil,
+    TwitterClient.sharedInstance?.mentionsTimeline(maxId: nil, sinceId: nil,
         success: { (tweets: [Tweet]) in
           self.tweets = tweets
           self.tableView.reloadData()
@@ -91,7 +91,7 @@ class TweetsViewController: UIViewController {
   }
 }
 
-extension TweetsViewController: UITableViewDataSource, UITableViewDelegate {
+extension MentionsViewController: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int)
       -> Int {
     if tweets != nil {
@@ -119,7 +119,7 @@ extension TweetsViewController: UITableViewDataSource, UITableViewDelegate {
   }
 }
 
-extension TweetsViewController: UIScrollViewDelegate {
+extension MentionsViewController: UIScrollViewDelegate {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     if !isRequestingMoreData {
       /* Set threshold to one screen length before the bottom of the results */
@@ -152,7 +152,7 @@ extension TweetsViewController: UIScrollViewDelegate {
       maxId = tweets.last!.id - 1
     }
 
-    TwitterClient.sharedInstance?.homeTimeline(maxId: maxId, sinceId: nil,
+    TwitterClient.sharedInstance?.mentionsTimeline(maxId: maxId, sinceId: nil,
         success: { (tweets: [Tweet]) in
           if self.tweets == nil {
             self.tweets = tweets
@@ -172,7 +172,7 @@ extension TweetsViewController: UIScrollViewDelegate {
   }
 }
 
-extension TweetsViewController: TweetCellDelegate {
+extension MentionsViewController: TweetCellDelegate {
   func tweetCell(_ tweetCell: TweetCell, didUpdateTweet tweet: Tweet) {
     if let indexPath = tableView.indexPath(for: tweetCell) {
       tweets[indexPath.row] = tweet
@@ -190,7 +190,7 @@ extension TweetsViewController: TweetCellDelegate {
   }
 }
 
-extension TweetsViewController: DetailedTweetViewControllerDelegate {
+extension MentionsViewController: DetailedTweetViewControllerDelegate {
   func detailedTweetViewController(
       _ detailedTweetViewController: DetailedTweetViewController,
       didUpdateTweet tweet: Tweet) {
@@ -216,7 +216,7 @@ extension TweetsViewController: DetailedTweetViewControllerDelegate {
   }
 }
 
-extension TweetsViewController: NewTweetViewControllerDelegate {
+extension MentionsViewController: NewTweetViewControllerDelegate {
   func newTweetViewController(_ newTweetViewController: NewTweetViewController,
       didPostTweet tweet: Tweet) {
     if tweets != nil {

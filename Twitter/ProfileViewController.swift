@@ -1,49 +1,79 @@
 //
-//  TweetsViewController.swift
+//  ProfileViewController.swift
 //  Twitter
 //
-//  Created by Janvier Wijaya on 4/12/17.
+//  Created by Janvier Wijaya on 4/22/17.
 //  Copyright © 2017 Janvier Wijaya. All rights reserved.
 //
 
 import UIKit
 
-class TweetsViewController: UIViewController {
-  @IBOutlet weak var tableView: UITableView!
+class ProfileViewController: UIViewController {
+  @IBOutlet weak var userBannerImageView: UIImageView!
+  @IBOutlet weak var userProfileImageView: UIImageView!
+  @IBOutlet weak var userNameLabel: UILabel!
+  @IBOutlet weak var userScreenNameLabel: UILabel!
+  @IBOutlet weak var statusesCountLabel: UILabel!
+  @IBOutlet weak var friendsCountLabel: UILabel!
+  @IBOutlet weak var followersCountLabel: UILabel!
+  @IBOutlet weak var tweetsTableView: UITableView!
 
+  var user: User!
   var tweets: [Tweet]!
 
   var isRequestingMoreData = false
   var requestingMoreDataIndicator: ActivityIndicatorView?
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
 
     let nib = UINib(nibName: "TweetCell", bundle: nil)
-    tableView.register(nib, forCellReuseIdentifier: "TweetCell")
+    tweetsTableView.register(nib, forCellReuseIdentifier: "TweetCell")
 
-    tableView.dataSource = self
-    tableView.delegate = self
-    tableView.rowHeight = UITableViewAutomaticDimension
-    tableView.estimatedRowHeight = 98
+    tweetsTableView.dataSource = self
+    tweetsTableView.delegate = self
+    tweetsTableView.rowHeight = UITableViewAutomaticDimension
+    tweetsTableView.estimatedRowHeight = 98
+
+    if user == nil {
+      user = User.currentUser
+    }
+
+    title = user.name
+
+    if let url = user.bannerImageURL {
+      userBannerImageView.setImageWith(url)
+    }
+
+    if let url = user.profileImageURL {
+      userProfileImageView.setImageWith(url)
+      userProfileImageView.clipsToBounds = true
+      userProfileImageView.layer.cornerRadius = 3
+    }
+
+    userNameLabel.text = user.name
+    userScreenNameLabel.text = "@\(user.screenName!)"
+    statusesCountLabel.text = "\(user.statusesCount)"
+    friendsCountLabel.text = "\(user.friendsCount)"
+    followersCountLabel.text = "\(user.followersCount)"
 
     /* Allow pull to refresh */
     let refreshControl = UIRefreshControl()
     refreshControl.addTarget(self, action: #selector(refreshTimeline(_:)),
         for: .valueChanged)
-    tableView.insertSubview(refreshControl, at: 0)
+    tweetsTableView.insertSubview(refreshControl, at: 0)
 
     /* Set up activity indicator for requesting more data */
-    let frame = CGRect(x: 0, y: tableView.contentSize.height,
-        width: tableView.bounds.size.width,
+    let frame = CGRect(x: 0, y: tweetsTableView.contentSize.height,
+        width: tweetsTableView.bounds.size.width,
         height: ActivityIndicatorView.defaultHeight)
     requestingMoreDataIndicator = ActivityIndicatorView(frame: frame)
     requestingMoreDataIndicator!.isHidden = true
-    tableView.addSubview(requestingMoreDataIndicator!)
+    tweetsTableView.addSubview(requestingMoreDataIndicator!)
 
-    var inset = tableView.contentInset
+    var inset = tweetsTableView.contentInset
     inset.bottom += ActivityIndicatorView.defaultHeight
-    tableView.contentInset = inset
+    tweetsTableView.contentInset = inset
 
     refreshTimeline(refreshControl)
   }
@@ -52,7 +82,7 @@ class TweetsViewController: UIViewController {
     if segue.identifier != nil {
       if segue.identifier == "DetailedTweetSegue" {
         let cell = sender as! UITableViewCell
-        let indexPath = tableView.indexPath(for: cell)
+        let indexPath = tweetsTableView.indexPath(for: cell)
         let viewController = segue.destination as! DetailedTweetViewController
         viewController.delegate = self
         viewController.tweet = tweets[indexPath!.row]
@@ -64,7 +94,7 @@ class TweetsViewController: UIViewController {
       } else if segue.identifier == "ReplyToTweetSegue" {
         let replyToButton = sender as! UIButton
         let cell = replyToButton.superview!.superview as! UITableViewCell
-        let indexPath = tableView.indexPath(for: cell)
+        let indexPath = tweetsTableView.indexPath(for: cell)
         let navigationController = segue.destination as! UINavigationController
         let viewController = navigationController.topViewController as!
             NewTweetViewController
@@ -74,24 +104,18 @@ class TweetsViewController: UIViewController {
     }
   }
 
-  @IBAction func logout(_ sender: Any) {
-    TwitterClient.sharedInstance?.logout()
-  }
-
   func refreshTimeline(_ refreshControl: UIRefreshControl) {
-    TwitterClient.sharedInstance?.homeTimeline(maxId: nil, sinceId: nil,
+    TwitterClient.sharedInstance?.userTimeline(userId: user.id!, maxId: nil,
         success: { (tweets: [Tweet]) in
           self.tweets = tweets
-          self.tableView.reloadData()
-          refreshControl.endRefreshing()
+          self.tweetsTableView.reloadData()
         }, failure: { (error: Error) in
           print("ERROR: \(error.localizedDescription)")
-          refreshControl.endRefreshing()
         })
   }
 }
 
-extension TweetsViewController: UITableViewDataSource, UITableViewDelegate {
+extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int)
       -> Int {
     if tweets != nil {
@@ -119,21 +143,21 @@ extension TweetsViewController: UITableViewDataSource, UITableViewDelegate {
   }
 }
 
-extension TweetsViewController: UIScrollViewDelegate {
+extension ProfileViewController: UIScrollViewDelegate {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     if !isRequestingMoreData {
       /* Set threshold to one screen length before the bottom of the results */
-      let scrollOffsetThreshold = tableView.contentSize.height -
-          tableView.bounds.size.height
+      let scrollOffsetThreshold = tweetsTableView.contentSize.height -
+          tweetsTableView.bounds.size.height
 
       /* Request for more data when the user has scrolled past the threshold */
       if scrollView.contentOffset.y > scrollOffsetThreshold &&
-         tableView.isDragging {
+         tweetsTableView.isDragging {
         isRequestingMoreData = true
 
         /* Update position of activity indicator and start loading it */
-        let frame = CGRect(x: 0, y: tableView.contentSize.height,
-            width: tableView.bounds.size.width,
+        let frame = CGRect(x: 0, y: tweetsTableView.contentSize.height,
+            width: tweetsTableView.bounds.size.width,
             height: ActivityIndicatorView.defaultHeight)
         requestingMoreDataIndicator!.frame = frame
         requestingMoreDataIndicator!.startAnimating()
@@ -152,7 +176,7 @@ extension TweetsViewController: UIScrollViewDelegate {
       maxId = tweets.last!.id - 1
     }
 
-    TwitterClient.sharedInstance?.homeTimeline(maxId: maxId, sinceId: nil,
+    TwitterClient.sharedInstance?.userTimeline(userId: user.id!, maxId: maxId,
         success: { (tweets: [Tweet]) in
           if self.tweets == nil {
             self.tweets = tweets
@@ -163,7 +187,7 @@ extension TweetsViewController: UIScrollViewDelegate {
           }
           self.isRequestingMoreData = false
           self.requestingMoreDataIndicator!.stopAnimating()
-          self.tableView.reloadData()
+          self.tweetsTableView.reloadData()
         }, failure: { (error: Error) in
           self.isRequestingMoreData = false
           self.requestingMoreDataIndicator!.stopAnimating()
@@ -172,25 +196,27 @@ extension TweetsViewController: UIScrollViewDelegate {
   }
 }
 
-extension TweetsViewController: TweetCellDelegate {
+extension ProfileViewController: TweetCellDelegate {
   func tweetCell(_ tweetCell: TweetCell, didUpdateTweet tweet: Tweet) {
-    if let indexPath = tableView.indexPath(for: tweetCell) {
+    if let indexPath = tweetsTableView.indexPath(for: tweetCell) {
       tweets[indexPath.row] = tweet
     }
   }
 
   func tweetCell(_ tweetCell: TweetCell, willShowUserProfile user: User) {
-    let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
-    let profileViewController = storyboard.instantiateViewController(
-        withIdentifier: "ProfileViewController") as! ProfileViewController
+    if user.id != self.user.id {
+      let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+      let profileViewController = storyboard.instantiateViewController(
+          withIdentifier: "ProfileViewController") as! ProfileViewController
 
-    profileViewController.user = user
-    navigationController?.pushViewController(profileViewController,
-        animated: true)
+      profileViewController.user = user
+      navigationController?.pushViewController(profileViewController,
+          animated: true)
+    }
   }
 }
 
-extension TweetsViewController: DetailedTweetViewControllerDelegate {
+extension ProfileViewController: DetailedTweetViewControllerDelegate {
   func detailedTweetViewController(
       _ detailedTweetViewController: DetailedTweetViewController,
       didUpdateTweet tweet: Tweet) {
@@ -198,7 +224,7 @@ extension TweetsViewController: DetailedTweetViewControllerDelegate {
       for index in 0..<tweets.count {
         if tweets[index].id == tweet.id {
           tweets[index] = tweet
-          tableView.reloadRows(at: [IndexPath(row: index, section: 0)],
+          tweetsTableView.reloadRows(at: [IndexPath(row: index, section: 0)],
               with: .top)
           break
         }
@@ -211,17 +237,17 @@ extension TweetsViewController: DetailedTweetViewControllerDelegate {
       didPostReplyTweet tweet: Tweet) {
     if tweets != nil {
       tweets.insert(tweet, at: 0)
-      tableView.reloadData()
+      tweetsTableView.reloadData()
     }
   }
 }
 
-extension TweetsViewController: NewTweetViewControllerDelegate {
+extension ProfileViewController: NewTweetViewControllerDelegate {
   func newTweetViewController(_ newTweetViewController: NewTweetViewController,
       didPostTweet tweet: Tweet) {
     if tweets != nil {
       tweets.insert(tweet, at: 0)
-      tableView.reloadData()
+      tweetsTableView.reloadData()
     }
   }
 }

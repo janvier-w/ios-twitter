@@ -17,6 +17,9 @@ let NumSecondsPerWeek = 7 * NumSecondsPerDay
 @objc protocol TweetCellDelegate {
   @objc optional func tweetCell(_ tweetCell: TweetCell,
       didUpdateTweet tweet: Tweet)
+
+  @objc optional func tweetCell(_ tweetCell: TweetCell,
+      willShowUserProfile user: User)
 }
 
 class TweetCell: UITableViewCell {
@@ -111,8 +114,16 @@ class TweetCell: UITableViewCell {
   override func awakeFromNib() {
     super.awakeFromNib()
 
+    let tapGestureRecognizer = UITapGestureRecognizer(target: self,
+        action: #selector(showUserProfile(_:)))
+
+    userProfileImageView.addGestureRecognizer(tapGestureRecognizer)
     userProfileImageView.clipsToBounds = true
     userProfileImageView.layer.cornerRadius = 3
+  }
+
+  func showUserProfile(_ sender: UITapGestureRecognizer) {
+    delegate?.tweetCell?(self, willShowUserProfile: tweet.user)
   }
 
   @IBAction func repostTweet(_ sender: Any) {

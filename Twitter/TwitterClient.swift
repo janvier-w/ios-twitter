@@ -100,6 +100,47 @@ class TwitterClient: BDBOAuth1SessionManager {
         })
   }
 
+  func userTimeline(userId: Int, maxId: Int?,
+      success: @escaping ([Tweet]) -> Void,
+      failure: @escaping (Error) -> Void) {
+    var parameters: [String : String] = ["user_id" : "\(userId)"]
+    if let maxId = maxId {
+      parameters["max_id"] = "\(maxId)"
+    }
+
+    get("1.1/statuses/user_timeline.json",
+        parameters: parameters, progress: nil,
+        success: { (task: URLSessionDataTask, response: Any?) in
+          let tweets = Tweet.createTweets(
+              dictionaries: response as! [[String : Any]])
+          success(tweets)
+        }, failure: { (task: URLSessionDataTask?, error: Error) in
+          failure(error)
+        })
+  }
+
+  func mentionsTimeline(maxId: Int?, sinceId: Int?,
+      success: @escaping ([Tweet]) -> Void,
+      failure: @escaping (Error) -> Void) {
+    var parameters = [String : String]()
+    if let maxId = maxId {
+      parameters["max_id"] = "\(maxId)"
+    }
+    if let sinceId = sinceId {
+      parameters["since_id"] = "\(sinceId)"
+    }
+
+    get("1.1/statuses/mentions_timeline.json",
+        parameters: parameters, progress: nil,
+        success: { (task: URLSessionDataTask, response: Any?) in
+          let tweets = Tweet.createTweets(
+              dictionaries: response as! [[String : Any]])
+          success(tweets)
+        }, failure: { (task: URLSessionDataTask?, error: Error) in
+          failure(error)
+        })
+  }
+
   func postTweet(_ content: String, inReplyToStatusId statusId: Int?,
       success: @escaping (Tweet) -> Void,
       failure: @escaping (Error) -> Void) {
